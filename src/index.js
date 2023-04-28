@@ -6,6 +6,8 @@ import { dataRequest, allPages } from './js/api-request';
 
 const form = document.querySelector('#search-form');
 const gallery = document.querySelector('.gallery');
+const guard = document.querySelector('.js-guard');
+// console.log(typeof guard);
 
 const lightbox = new SimpleLightbox('.gallery a');
 
@@ -13,6 +15,14 @@ form.addEventListener('input', onInput);
 
 let searchQuery = '';
 let page = 1;
+
+const options = {
+  root: null,
+  rootMargin: '700px',
+  threshold: 0,
+};
+
+const observer = new IntersectionObserver(onObserver, options);
 
 //значення інпуту є змістом запиту
 function onInput(evt) {
@@ -59,6 +69,10 @@ function reciveOfImages(response) {
     paginationBtn.hidden = true;
   } else {
     createGalleryMarkup(images);
+    if (allPages > 1) {
+      observer.observe(guard);
+    }
+    tenderScroll();
     Notiflix.Notify.success(
       `Hooray! We found ${response.data.totalHits} images.`
     );
@@ -93,8 +107,6 @@ function createGalleryMarkup(images) {
     .join('');
 
   gallery.insertAdjacentHTML('beforeend', markup);
-
-  paginationBtn.hidden = false;
 }
 
 //прокручування сторінки
@@ -109,22 +121,13 @@ function tenderScroll() {
   });
 }
 
-const paginationBtn = document.querySelector('.js-pagination');
-
-paginationBtn.addEventListener('click', onPagination);
-
-//при кліку на кнопку Завантажити ще, робиться новий запит, отримується масив та робиться розмітна під нову порцію
-async function onPagination() {
-  page += 1;
-  const response = await dataRequest(searchQuery, page);
-  const images = response.data.hits;
-  createGalleryMarkup(images);
-  tenderScroll();
-  lightbox.refresh();
-  if (page > allPages) {
-    Notiflix.Notify.warning(
-      `"We're sorry, but you've reached the end of search results."`
-    );
-    paginationBtn.hidden = true;
-  }
+//нескінченний скролл
+async function onObserver(entries, observer) {
+  console.log(entries);
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      page += 1;
+      resultOfRequest();
+    }
+  });
 }
