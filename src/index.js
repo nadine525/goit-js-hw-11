@@ -71,7 +71,6 @@ function reciveOfImages(response) {
     if (allPages > 1) {
       observer.observe(guard);
     }
-    // tenderScroll();
     lightbox.refresh();
 
     if (page === allPages) {
@@ -120,18 +119,6 @@ function createGalleryMarkup(images) {
 
   gallery.insertAdjacentHTML('beforeend', markup);
 }
-
-//прокручування сторінки
-// function tenderScroll() {
-//   const { height: cardHeight } = document
-//     .querySelector('.gallery')
-//     .firstElementChild.getBoundingClientRect();
-
-//   window.scrollBy({
-//     top: cardHeight * 2,
-//     behavior: 'smooth',
-//   });
-// }
 
 //нескінченний скролл
 async function onObserver(entries, observer) {
