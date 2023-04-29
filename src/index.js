@@ -71,7 +71,7 @@ function reciveOfImages(response) {
     if (allPages > 1) {
       observer.observe(guard);
     }
-    tenderScroll();
+    // tenderScroll();
     lightbox.refresh();
 
     if (page === allPages) {
@@ -122,22 +122,22 @@ function createGalleryMarkup(images) {
 }
 
 //прокручування сторінки
-function tenderScroll() {
-  const { height: cardHeight } = document
-    .querySelector('.gallery')
-    .firstElementChild.getBoundingClientRect();
+// function tenderScroll() {
+//   const { height: cardHeight } = document
+//     .querySelector('.gallery')
+//     .firstElementChild.getBoundingClientRect();
 
-  window.scrollBy({
-    top: cardHeight * 2,
-    behavior: 'smooth',
-  });
-}
+//   window.scrollBy({
+//     top: cardHeight * 2,
+//     behavior: 'smooth',
+//   });
+// }
 
 //нескінченний скролл
 async function onObserver(entries, observer) {
   console.log(entries);
   entries.forEach(entry => {
-    if (entry.isIntersecting) {
+    if (page < allPages && entry.isIntersecting) {
       page += 1;
       resultOfRequest();
     }
