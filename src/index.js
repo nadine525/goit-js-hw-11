@@ -66,17 +66,29 @@ function reciveOfImages(response) {
     Notiflix.Notify.failure(
       'Sorry, there are no images matching your search query. Please try again.'
     );
-    paginationBtn.hidden = true;
   } else {
     createGalleryMarkup(images);
     if (allPages > 1) {
       observer.observe(guard);
     }
     tenderScroll();
-    Notiflix.Notify.success(
-      `Hooray! We found ${response.data.totalHits} images.`
-    );
     lightbox.refresh();
+
+    if (page === allPages) {
+      observer.unobserve(guard);
+    }
+
+    if (page === 1) {
+      Notiflix.Notify.success(
+        `Hooray! We found ${response.data.totalHits} images.`
+      );
+    }
+
+    if (page > allPages) {
+      Notiflix.Notify.warning(
+        `"We're sorry, but you've reached the end of search results."`
+      );
+    }
   }
 }
 
