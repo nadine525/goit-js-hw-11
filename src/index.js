@@ -37,6 +37,8 @@ form.addEventListener('submit', onSubmit);
 function onSubmit(evt) {
   evt.preventDefault();
   gallery.innerHTML = '';
+  page = 1;
+  observer.unobserve(guard);
   if (!evt.target.elements.searchQuery.value.trim()) {
     Notiflix.Notify.failure(
       'Input is empty. Please, write the subject of your request.'
